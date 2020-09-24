@@ -19,7 +19,7 @@ int main(){
   vector<Student> slist;
   bool exit = false;
   while (exit == false){
-  cout << "Want to ADD, DELETE, or PRINT student list? If not, say EXIT. ";
+  cout << "Want to ADD, DELETE, or PRINT student list? If not, say EXIT. Check";
     string request;
     cin >> request;
     if (request == "PRINT") {
