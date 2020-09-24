@@ -4,6 +4,7 @@
 
 using namespace std;
 
+// creating the Student struct to have the four relevant data
 struct Student {
   string firstname;
   string lastname;
@@ -11,15 +12,18 @@ struct Student {
   double GPA;
 };
 
-void print(vector<Student> & slist);
-void add(vector<Student> & slist);
-void del(vector<Student> & slist);
+//introduce functions at the top because stupid C++ can't look ahead
+void print(vector<Student *> & slist);
+void add(vector<Student *> & slist);
+void del(vector<Student *> & slist);
 
+//main loop
 int main(){
-  vector<Student> slist;
+  vector<Student*> slist;
   bool exit = false;
+  // loops asking what the user wants to do, if "EXIT" then it exits, else it refers to the relevant function
   while (exit == false){
-  cout << "Want to ADD, DELETE, or PRINT student list? If not, say EXIT. Check";
+  cout << "Want to ADD, DELETE, or PRINT student list? If not, say EXIT. ";
     string request;
     cin >> request;
     if (request == "PRINT") {
@@ -32,19 +36,21 @@ int main(){
       del(slist);
     }
     if (request == "EXIT") {
-      break;
+      exit = true;
     }
   }
   return 0;
 }
-void print(vector<Student> & slist){
+//print just takes everything in slist and reads out its four stored data
+void print(vector<Student*> & slist){
   for(int i = 0; i < slist.size(); i++){
-    cout << slist.at(i).firstname << " " << slist.at(i).lastname << ", " << slist.at(i).studentID << ", " << fixed << setprecision(2) << slist.at(i).GPA << endl;
+    Student stud = *(slist.at(i));
+    cout << stud.firstname << " " << stud.lastname << ", " << stud.studentID << ", " << fixed << setprecision(2) << stud.GPA << endl;
   }
   return;
 }
-void add(vector<Student> & slist){
-  int k = slist.size();
+//add gets the four data from cin, makes a struct for the new student, and concatenates it to the end of slist; this is why the vector is useful
+void add(vector<Student*> & slist){
   string fn;
   string ln;
   int id;
@@ -53,22 +59,28 @@ void add(vector<Student> & slist){
   cout << "New student last name: "; cin >> ln;
   cout << "New student ID number: "; cin >> id;
   cout << "New student GPA: "; cin >> gpa;
-  struct Student newstudent = {fn,ln,id,gpa};
-  slist.push_back(newstudent);
+  Student newstudent = {fn,ln,id,gpa};
+  Student* newstudentptr = &newstudent;
+  slist.push_back(newstudentptr);
   return;
 }
-void del(vector<Student> & slist){
+//del asks for an ID number, goes through every student and deletes only the first student it finds with this ID
+//(otherwise the size of the list is changing while the loop loops and it is weird)
+void del(vector<Student*> & slist){
   cout << "What student would you like to delete? Enter their student ID: ";
   int IDinput;
   cin >> IDinput;
-  bool IDfound = false;
-  for(int i = 0; i <= slist.size(); i++)
+  int i = 0;
+  bool foundID = false;
+  while((foundID == false) && (i <= slist.size()))
     {
-      if (slist.at(i).studentID == IDinput){
+      i++;
+      Student* stud = slist.at(i);
+      Student stud1 = *stud; 
+      if (stud1.studentID == IDinput){
         slist.erase(slist.begin()+i);
-        IDfound = true;
+        foundID = true;
       }
     }
-  if (IDfound == false) cout << "That ID couldn't be found.";
   return;
 }
