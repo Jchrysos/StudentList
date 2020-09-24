@@ -55,12 +55,11 @@ void add(vector<Student*> & slist){
   string ln;
   int id;
   double gpa;
-  cout << "New student first name: "; cin >> fn;
-  cout << "New student last name: "; cin >> ln;
-  cout << "New student ID number: "; cin >> id;
-  cout << "New student GPA: "; cin >> gpa;
-  Student newstudent = {fn,ln,id,gpa};
-  Student* newstudentptr = &newstudent;
+  Student* newstudentptr = new Student();
+  cout << "New student first name: "; cin >> newstudentptr->firstname;
+  cout << "New student last name: "; cin >> newstudentptr->lastname;
+  cout << "New student ID number: "; cin >> newstudentptr->studentID;
+  cout << "New student GPA: "; cin >> newstudentptr->GPA;
   slist.push_back(newstudentptr);
   return;
 }
@@ -74,13 +73,12 @@ void del(vector<Student*> & slist){
   bool foundID = false;
   while((foundID == false) && (i <= slist.size()))
     {
-      i++;
-      Student* stud = slist.at(i);
-      Student stud1 = *stud; 
-      if (stud1.studentID == IDinput){
+      Student* student1 = slist.at(i);
+      if (student1->studentID == IDinput){
         slist.erase(slist.begin()+i);
         foundID = true;
       }
+      i++;
     }
   return;
 }
